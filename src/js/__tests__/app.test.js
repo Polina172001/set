@@ -14,46 +14,59 @@ test('create player', () => {
   });
 });
 
-test('new Team', () => {
-  expect(new Team()).toEqual({
-    members: Set {}
-  });
-});
-
 test('add', () => {
-  const player1 = JSON.stringify(new Character('Polina', 'Bowman'));
+  const player1 = new Character('Polina', 'Bowman');
   const client = new Team();
+  client.add(player1);
 
-  expect(client.add(player1)).toEqual('{"attack":25,"defence":25,"health":100,"level":1,"name":"Polina","type":"Bowman"}');
+  expect(client.members).toContain(player1);
 });
 
 test('addAll', () => {
-  const player1 = JSON.stringify(new Character('Polina', 'Bowman'));
-  const player2 = JSON.stringify(new Character('Kate', 'Bowman'));
+  const player1 = new Character('Polina', 'Bowman');
+  const player2 = new Character('Kate', 'Bowman');
   const client = new Team();
+  client.addAll([player1, player2]);
 
-  expect(client.addAll([player1, player2])).toEqual('{"attack":25,"defence":25,"health":100,"level":1,"name":"Polina","type":"Bowman"}',
-    '{"attack":25,"defence":25,"health":100,"level":1,"name":"Kate","type":"Bowman"}');
+  expect(client.members).toContain(player1, player2);
 });
 
 test('addAll Error', () => {
-  const player1 = JSON.stringify(new Character('Polina', 'Bowman'));
-  const player2 = JSON.stringify(new Character('Kate', 'Bowman'));
-  const player3 = JSON.stringify(new Character('Kate', 'Bowman'));
+  const player1 = new Character('Polina', 'Bowman');
+  const player2 = new Character('Kate', 'Bowman');
+  const player3 = new Character('Kate', 'Bowman');
 
   const client = new Team();
-
-  expect(client.addAll([player1, player2, player3])).toThrowError('Игрок существует');
+  JSON.stringify(player1);
+  JSON.stringify(player2);
+  JSON.stringify(player3);
+  client.addAll([player1, player2, player3]);
+  expect(client.members).toThrowError('Игрок существует');
 });
 
 test('toArray', () => {
-  const player1 = JSON.stringify(new Character('Polina', 'Bowman'));
-  const player2 = JSON.stringify(new Character('Kate', 'Bowman'));
+  const player1 = new Character('Polina', 'Bowman');
+  const player2 = new Character('Kate', 'Bowman');
 
   const client = new Team();
-
-  expect(client.addAll([player1, player2]).toArray()).toEqual([
-    '{"attack":25,"defence":25,"health":100,"level":1,"name":"Polina","type":"Bowman"}',
-    '{"attack":25,"defence":25,"health":100,"level":1,"name":"Kate","type":"Bowman"}',
+  client.addAll([player1, player2]);
+  client.toArray();
+  expect(client).toEqual([
+    Character {
+      attack: 25,
+      defence: 25,
+      health: 100,
+      level: 1,
+      name: 'Polina',
+      type: 'Bowman'
+    },
+    Character {
+      attack: 25,
+      defence: 25,
+      health: 100,
+      level: 1,
+      name: 'Kate',
+      type: 'Bowman'
+    }
   ]);
 });
