@@ -37,11 +37,12 @@ test('addAll Error', () => {
   const player3 = new Character('Kate', 'Bowman');
 
   const client = new Team();
-  JSON.stringify(player1);
-  JSON.stringify(player2);
-  JSON.stringify(player3);
-  client.addAll([player1, player2, player3]);
-  expect(client.members).toThrowError('Игрок существует');
+  const fn = () => client.addAll([
+    JSON.stringify(player1),
+    JSON.stringify(player2),
+    JSON.stringify(player3),
+  ]);
+  expect(fn).toThrowError('Игрок существует');
 });
 
 test('toArray', () => {
@@ -50,23 +51,5 @@ test('toArray', () => {
 
   const client = new Team();
   client.addAll([player1, player2]);
-  client.toArray();
-  expect(client).toEqual([
-    Character {
-      attack: 25,
-      defence: 25,
-      health: 100,
-      level: 1,
-      name: 'Polina',
-      type: 'Bowman'
-    },
-    Character {
-      attack: 25,
-      defence: 25,
-      health: 100,
-      level: 1,
-      name: 'Kate',
-      type: 'Bowman'
-    }
-  ]);
+  expect(client.toArray()).toEqual(Array.from([player1, player2]));
 });
